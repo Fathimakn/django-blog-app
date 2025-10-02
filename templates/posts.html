@@ -1,0 +1,61 @@
+{% extends 'master.html' %}
+
+{% block title %}
+<title>POST PAGE</title>
+<style>
+    .nav {
+    text-align: right;
+    margin: 10px;
+  }
+
+  .nav a {
+    text-decoration: none;
+    color: #fff;
+    background: #007BFF;
+    padding: 6px 12px;
+    border-radius: 4px;
+  }
+.post-card {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin: 10px auto;
+  border-radius: 6px;
+  background: #f9f9f9;
+  max-width: 600px;
+}
+
+.post-card h2 {
+  margin: 0;
+}
+.post-card small {
+  color: #666;
+}
+.post-card a {
+  margin-right: 10px;
+  color: #007BFF;
+  text-decoration: none;
+}
+</style>
+
+{% endblock %}
+<div class="nav">
+  <a href="{% url 'home' %}">Profile</a>
+</div>
+{% block content %}
+<h1>ALL POSTS</h1>
+<p>Welcome,<strong>{{user.username}}</strong></p>
+<p><a href="{% url 'add_post' %}">ADD NEW POST</a></p>
+    {% for i in post %}
+    <div class="post-card">
+        <h2>{{ i.title }}</h2>
+        <p>{{ i.content }}</p>
+        <p><small>By:{{i.user.username}}|date:{{i.created_at}}</small></p>
+        {% if i.user == user %}
+            <p><a href="{% url 'edit_post' i.id %}">EDIT</a> </p>
+        {% endif %}
+     </div>
+    {% empty %}
+        <p>No posts to show</p>
+    {% endfor %}
+
+{% endblock %}

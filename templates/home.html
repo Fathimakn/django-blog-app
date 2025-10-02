@@ -1,0 +1,110 @@
+{% extends 'master.html' %}
+
+{% block title %}
+<title>HOME PAGE</title>
+{% endblock %}
+
+{% block content %}
+<style>
+  details {
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+  }
+
+  h1 {
+    text-align: center;
+    color: #333;
+    background: #ddd;
+    padding: 10px;
+    border-radius: 6px;
+  }
+
+  .profile-container {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .profile-container img {
+    max-width: 150px;
+    height: auto;
+    border-radius: 50%;
+    margin: 10px 0;
+  }
+
+  .nav {
+    text-align: right;
+    margin: 10px;
+  }
+
+  .nav a {
+    text-decoration: none;
+    color: #fff;
+    background: #007BFF;
+    padding: 6px 12px;
+    border-radius: 4px;
+  }
+
+  .update-link {
+    margin-top: 15px;
+  }
+
+  .update-link a {
+    background: green;
+    color: white;
+    padding: 8px 12px;
+    text-decoration: none;
+    border-radius: 4px;
+  }
+</style>
+
+<div class="nav">
+  <a href="{% url 'logout' %}">Logout</a>
+  <a href="{% url 'posts' %}">Posts</a>
+</div>
+
+<h1>User Profile</h1>
+
+<div class="profile-container">
+  <h2>Hello, {{ user.first_name }} {{ user.last_name }}</h2>
+  <p><strong>Email:</strong> {{ user.email }}</p>
+  <p><strong>Bio:</strong> {{ profile.bio }}</p>
+  <p><strong>DOB:</strong> {{ profile.dob }}</p>
+  <p><strong>Phone:</strong> {{ profile.phone_number }}</p>
+  <p><strong>Interest:</strong>
+  {% for i in profile.interests.all %}
+      {{i.name}}
+  {% empty %}
+    no interests selected</p>
+  {% endfor %}
+  <p><strong>Posts:</strong></p>
+    {% for i in post %}
+      <p>
+        <details>
+          <summary>{{ i.title }}</summary>
+          <p style="margin-top: 5px; color: #555;">{{ i.content }}</p>
+        </details>
+      </p>
+    {% empty %}
+      <p>No Posts</p>
+    {% endfor %}
+
+  {% if profile.image %}
+    <img src="{{ profile.image.url }}" alt="Profile Picture">
+  {% else %}
+    <img src="/media/profile_pics/default.jpg" alt="Default Profile Picture">
+  {% endif %}
+
+  <div class="update-link">
+    <a href="{% url 'update' profile.id %}">Update Profile</a>
+  </div>
+</div>
+{% endblock %}
